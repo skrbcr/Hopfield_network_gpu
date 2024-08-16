@@ -39,7 +39,7 @@ class AssocMem:
         Generates a synaptic matrix J based on the input patterns.
         """
         cp.random.seed(np.uint64(self.seed))
-        xi = cp.random.choice([-1, 1], size=(self.p, self.n))
+        xi = cp.random.choice([-1, 1], size=(self.p - 1, self.n))
         self.J = (cp.outer(self.xi0, self.xi0) + xi.T @ xi) / self.n
 
     def recall(self, m0, delta_m=0.001, max_steps=100):

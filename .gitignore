@@ -1,2 +1,6 @@
 *.mp4
-.ipynb_checkpoints
+*.png
+!github.png
+/.ipynb_checkpoints/
+/__pycache__/
+

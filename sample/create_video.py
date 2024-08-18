@@ -1,5 +1,6 @@
 import sys
-from AssocMem import AssocMem
+sys.path.append('.')
+from Hopfield import HopfieldVis
 
 if __name__ == '__main__':
     if len(sys.argv) <= 3:
@@ -14,12 +15,12 @@ if __name__ == '__main__':
     p = int(sys.argv[2])
     m0 = float(sys.argv[3])
     print('Creating Hopfield network.')
-    assocmem = AssocMem(image_name, p)
+    hopfield = HopfieldVis(image_name, p)
     print('Memorizing data.')
-    assocmem.memorize()
+    hopfield.memorize()
     print('Recalling your image.')
-    assocmem.recall(m0, 1e-4)
+    hopfield.recall(m0, 1e-4)
     print('Saving recalling video.')
-    assocmem.save_video()
+    hopfield.save_video()
     print('Done.')
 

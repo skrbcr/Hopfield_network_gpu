@@ -1,44 +1,32 @@
-import sys
-import os
-import numpy as np
 import cupy as cp
+import numpy as np
 import cv2
+import os
 import matplotlib.pyplot as plt
+import sys
 
-class AssocMem:
-    def __init__(self, image_name, p, seed=1234):
+class Hopfield:
+    def __init__(self, n, p, seed=1234):
         """
-        Initializes the associative memory with the given parameters.
+        Initializes the Hopfield network with the given parameters.
 
         Args:
-            image_name (str): The name of the image file to be used as the pattern.
+            n (int): The data size
             p (int): The number of patterns to memorize.
             seed (int, optional): The random seed for reproducibility. Defaults to 1234.
         """
-        self.image_name = image_name
+        self.n = n
         self.p = p
         self.m0 = 0
-        self.delta_m = 0
-        self.max_steps = 0
-        self.seed = seed
-        self.s_list = []
+        cp.random.seed(np.uint64(seed))
         self.m = []
-
-        self.image = cv2.imread(self.image_name, cv2.IMREAD_GRAYSCALE)
-        if self.image is None:
-            print(f"[Error] Cannot open \"{self.image_name}\"")
-            sys.exit(-1)
-        self.xi0 = cp.where(cp.asarray(self.image.reshape(-1)) == 255, 1, -1)
-        self.n = self.xi0.size
-        self.width = self.image[0].size
-        self.height = self.n // self.width
+        self.xi0 = cp.random.choice([-1, 1], size=(self.n, ))
 
     def memorize(self):
         """
         Memorizes the pattern using the Hopfield network.
         Generates a synaptic matrix J based on the input patterns.
         """
-        cp.random.seed(np.uint64(self.seed))
         xi = cp.random.choice([-1, 1], size=(self.p - 1, self.n))
         self.J = (cp.outer(self.xi0, self.xi0) + xi.T @ xi) / self.n
 
@@ -46,27 +34,21 @@ class AssocMem:
         """
         Recalls the pattern from memory using the Hopfield network.
         Simulates the network dynamics for a maximum of `max_steps` or until convergence.
-        Stores each state of s in `s_list` and calculates m at each step.
 
         Args:
             m0 (float): The initial overlap between the input and the memorized pattern.
             delta_m (float, optional): The convergence threshold for m0. Defaults to 0.001.
             max_steps (int, optional): The maximum number of recall steps. Defaults to 100.
         """
-        self.m0 = m0
-        self.delta_m = delta_m
-        self.max_steps = max_steps
         s = self.xi0.copy()
-        indices = cp.random.choice(self.n, size=int(self.n * (1 - self.m0) / 2), replace=False)
+        indices = cp.random.choice(self.n, size=int(self.n * (1 - m0) / 2), replace=False)
         s[indices] = -s[indices]
         self.m = [float(cp.dot(self.xi0, s) / self.n)]
-        self.s_list = [s.get()]
 
-        for _ in range(self.max_steps):
+        for _ in range(max_steps):
             s = cp.where((self.J @ s) >= 0, 1, -1)
-            self.s_list.append(s.get())
             self.m.append(float(cp.dot(self.xi0, s) / self.n))
-            if cp.abs(self.m[-1] - self.m[-2]) <= self.delta_m:
+            if cp.abs(self.m[-1] - self.m[-2]) <= delta_m:
                 break
 
     def plot_m(self, save_name=None, dpi=300):
@@ -87,6 +69,75 @@ class AssocMem:
         if save_name is not None:
             fig.savefig(save_name, dpi=dpi)
         plt.show()
+
+    def free(self):
+        """
+        Frees the GPU memory used by the class.
+        Resets all class variables and releases the memory pools.
+
+        Returns:
+            tuple: A tuple containing used_bytes, total_bytes, and n_free_blocks from the memory pool of cupy.
+        """
+        self.xi0 = None
+        self.J = None
+        self.m.clear()
+
+        mempool = cp.get_default_memory_pool()
+        pinned_mempool = cp.get_default_pinned_memory_pool()
+        mempool.free_all_blocks()
+        pinned_mempool.free_all_blocks()
+        return mempool.used_bytes(), mempool.total_bytes(), pinned_mempool.n_free_blocks()
+
+
+class HopfieldVis(Hopfield):
+    def __init__(self, image_name, p, seed=1234):
+        """
+        Initializes the Hopfield network with the given parameters.
+
+        Args:
+            image_name (str): The name of the image file to be used as the pattern.
+            p (int): The number of patterns to memorize.
+            seed (int, optional): The random seed for reproducibility. Defaults to 1234.
+        """
+        self.image_name = image_name
+        self.p = p
+        self.m0 = 0
+        cp.random.seed(np.uint64(seed))
+        self.s_list = []
+        self.m = []
+
+        self.image = cv2.imread(self.image_name, cv2.IMREAD_GRAYSCALE)
+        if self.image is None:
+            print(f"[Error] Cannot open \"{self.image_name}\"")
+            sys.exit(-1)
+        self.xi0 = cp.where(cp.asarray(self.image.reshape(-1)) == 255, 1, -1)
+        self.n = self.xi0.size
+        self.width = self.image[0].size
+        self.height = self.n // self.width
+
+    def recall(self, m0, delta_m=0.001, max_steps=100):
+        """
+        Recalls the pattern from memory using the Hopfield network.
+        Simulates the network dynamics for a maximum of `max_steps` or until convergence.
+        Stores each state of s in `s_list` and calculates m at each step.
+
+        Args:
+            m0 (float): The initial overlap between the input and the memorized pattern.
+            delta_m (float, optional): The convergence threshold for m0. Defaults to 0.001.
+            max_steps (int, optional): The maximum number of recall steps. Defaults to 100.
+        """
+        s = self.xi0.copy()
+        indices = cp.random.choice(self.n, size=int(self.n * (1 - m0) / 2), replace=False)
+        s[indices] = -s[indices]
+        self.m = [float(cp.dot(self.xi0, s) / self.n)]
+        self.s_list = [s.get()]
+
+        for _ in range(max_steps):
+            s = cp.where((self.J @ s) >= 0, 1, -1)
+            self.s_list.append(s.get())
+            self.m.append(float(cp.dot(self.xi0, s) / self.n))
+            if cp.abs(self.m[-1] - self.m[-2]) <= delta_m:
+                break
 
     def save_video(self, output_name=None, output_size=(1920, 1080)):
         """
@@ -111,29 +162,6 @@ class AssocMem:
         
         video.release()
 
-    def free(self):
-        """
-        Frees the GPU memory used by the class.
-        Resets all class variables and releases the memory pools.
-
-        Returns:
-            tuple: A tuple containing used_bytes, total_bytes, and n_free_blocks from the memory pool of cupy.
-        """
-        self.xi = None
-        self.xi0 = None
-        self.s = None
-        self.J = None
-        self.indices = None
-        self.s_list.clear()
-        self.m.clear()
-        self.image = None
-
-        mempool = cp.get_default_memory_pool()
-        pinned_mempool = cp.get_default_pinned_memory_pool()
-        mempool.free_all_blocks()
-        pinned_mempool.free_all_blocks()
-        return mempool.used_bytes(), mempool.total_bytes(), pinned_mempool.n_free_blocks()
-
     def _resize_to_fhd(self, image, output_size):
         """
         Resizes an image to the specified size while maintaining the aspect ratio.
@@ -157,3 +185,23 @@ class AssocMem:
         fhd_image[y_offset:y_offset+new_height, x_offset:x_offset+new_width] = resized_image
 
         return fhd_image
+
+    def free(self):
+        """
+        Frees the GPU memory used by the class.
+        Resets all class variables and releases the memory pools.
+
+        Returns:
+            tuple: A tuple containing used_bytes, total_bytes, and n_free_blocks from the memory pool of cupy.
+        """
+        self.xi0 = None
+        self.J = None
+        self.s_list.clear()
+        self.m.clear()
+        self.image = None
+
+        mempool = cp.get_default_memory_pool()
+        pinned_mempool = cp.get_default_pinned_memory_pool()
+        mempool.free_all_blocks()
+        pinned_mempool.free_all_blocks()
+        return mempool.used_bytes(), mempool.total_bytes(), pinned_mempool.n_free_blocks()

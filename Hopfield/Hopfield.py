@@ -153,7 +153,7 @@ class HopfieldVis(Hopfield):
         """
         if output_name is None:
             output_name = f'{os.path.splitext(os.path.basename(self.image_name))[0]}_P_{self.p}_M0_{self.m0}.mp4'
-        
+
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         video = cv2.VideoWriter(output_name, fourcc, 1, output_size, isColor=False)
         if not video.isOpened():
@@ -161,9 +161,11 @@ class HopfieldVis(Hopfield):
             sys.exit(-1)
 
         for s in self.s_list:
-            frame = self._resize_to_fhd(np.where(s.reshape((self.height, self.width)) == 1, 255, 0).astype(np.uint8), output_size)
+            frame = self._resize_to_fhd(
+                    np.where(s.reshape((self.height, self.width)) == 1, 255, 0).astype(np.uint8), output_size
+                    )
             video.write(frame)
-       
+
         video.release()
 
     def _resize_to_fhd(self, image, output_size):

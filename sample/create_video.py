@@ -7,7 +7,8 @@ if __name__ == '__main__':
         print('Usage:\n',
               f'{sys.argv[0]} IMAGE_FILE P M0\n\n',
               '- IMAGE_FILE: Image file that you want to memorize and restore\n',
-              '- P: The number of image that the Hopfield network memorize (1 is the file that you provide and P - 1 is random-generated)\n'
+              '- P: The number of image that the Hopfield network memorize \
+                      (1 is the file that you provide and P - 1 is random-generated)\n'
               '- M0: Initial overlap',
               )
         sys.exit(0)

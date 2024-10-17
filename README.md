@@ -1,5 +1,6 @@
 # Hopfield Network GPU
 
+[![Python package](https://github.com/skrbcr/Hopfield_network_gpu/actions/workflows/python-package.yml/badge.svg)](https://github.com/skrbcr/Hopfield_network_gpu/actions/workflows/python-package.yml)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/skrbcr/Hopfield_network_gpu/blob/main/Hopfield_Tutorial.ipynb)
 [![GitHub Pages](https://img.shields.io/badge/docs-GitHub%20Pages-blue?style=flat-square&logo=github)](https://skrbcr.github.io/Hopfield_network_gpu/)
 

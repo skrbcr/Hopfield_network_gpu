@@ -163,7 +163,7 @@ class HopfieldVis(Hopfield):
         for s in self.s_list:
             frame = self._resize_to_fhd(np.where(s.reshape((self.height, self.width)) == 1, 255, 0).astype(np.uint8), output_size)
             video.write(frame)
-        
+       
         video.release()
 
     def _resize_to_fhd(self, image, output_size):
@@ -180,7 +180,7 @@ class HopfieldVis(Hopfield):
         scale = min(output_size[0] / self.width, output_size[1] / self.height)
         new_width = int(self.width * scale)
         new_height = int(self.height * scale)
-        
+
         resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
         fhd_image = np.zeros((output_size[1], output_size[0]), dtype=np.uint8)
 

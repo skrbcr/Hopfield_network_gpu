@@ -23,4 +23,3 @@ if __name__ == '__main__':
     print('Saving recalling video.')
     hopfield.save_video()
     print('Done.')
-

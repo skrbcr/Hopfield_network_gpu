@@ -1,4 +1,3 @@
-
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -27,5 +26,3 @@ if __name__ == '__main__':
         ax.plot(np.arange(len(hopfield.m)), hopfield.m, color=colormap[i], label=f'$p / N = {p / N:.2f}$')
 
     ax.legend()
-    plt.show()
-

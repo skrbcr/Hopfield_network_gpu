@@ -5,6 +5,7 @@ import os
 import matplotlib.pyplot as plt
 import sys
 
+
 class Hopfield:
     def __init__(self, n, p, seed=1234):
         """
@@ -76,7 +77,10 @@ class Hopfield:
         Resets all class variables and releases the memory pools.
 
         Returns:
-            tuple: A tuple containing used_bytes, total_bytes, and n_free_blocks from the memory pool of cupy.
+            tuple: A tuple containing:
+                - used_bytes
+                - total_bytes
+                - n_free_blocks from the memory pool of cupy.
         """
         self.xi0 = None
         self.J = None
@@ -149,7 +153,7 @@ class HopfieldVis(Hopfield):
         """
         if output_name is None:
             output_name = f'{os.path.splitext(os.path.basename(self.image_name))[0]}_P_{self.p}_M0_{self.m0}.mp4'
-        
+
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         video = cv2.VideoWriter(output_name, fourcc, 1, output_size, isColor=False)
         if not video.isOpened():
@@ -157,9 +161,11 @@ class HopfieldVis(Hopfield):
             sys.exit(-1)
 
         for s in self.s_list:
-            frame = self._resize_to_fhd(np.where(s.reshape((self.height, self.width)) == 1, 255, 0).astype(np.uint8), output_size)
+            frame = self._resize_to_fhd(
+                    np.where(s.reshape((self.height, self.width)) == 1, 255, 0).astype(np.uint8), output_size
+                    )
             video.write(frame)
-        
+
         video.release()
 
     def _resize_to_fhd(self, image, output_size):
@@ -176,7 +182,7 @@ class HopfieldVis(Hopfield):
         scale = min(output_size[0] / self.width, output_size[1] / self.height)
         new_width = int(self.width * scale)
         new_height = int(self.height * scale)
-        
+
         resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
         fhd_image = np.zeros((output_size[1], output_size[0]), dtype=np.uint8)
 
@@ -192,7 +198,10 @@ class HopfieldVis(Hopfield):
         Resets all class variables and releases the memory pools.
 
         Returns:
-            tuple: A tuple containing used_bytes, total_bytes, and n_free_blocks from the memory pool of cupy.
+            tuple: A tuple containing:
+                - used_bytes
+                - total_bytes
+                - n_free_blocks from the memory pool of cupy.
         """
         self.xi0 = None
         self.J = None

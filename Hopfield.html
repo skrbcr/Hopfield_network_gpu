@@ -47,8 +47,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Hopfield</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Hopfield package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hopfield-hopfield-module">Hopfield.Hopfield module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Hopfield.Hopfield">Hopfield.Hopfield module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Hopfield.Hopfield.Hopfield"><code class="docutils literal notranslate"><span class="pre">Hopfield</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Hopfield.Hopfield.HopfieldVis"><code class="docutils literal notranslate"><span class="pre">HopfieldVis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Hopfield">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -85,11 +89,137 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="hopfield-hopfield-module">
-<h2>Hopfield.Hopfield module<a class="headerlink" href="#hopfield-hopfield-module" title="Link to this heading"></a></h2>
+<section id="module-Hopfield.Hopfield">
+<span id="hopfield-hopfield-module"></span><h2>Hopfield.Hopfield module<a class="headerlink" href="#module-Hopfield.Hopfield" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="Hopfield.Hopfield.Hopfield">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hopfield.Hopfield.</span></span><span class="sig-name descname"><span class="pre">Hopfield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1234</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hopfield.Hopfield.Hopfield" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Hopfield.Hopfield.Hopfield.memorize">
+<span class="sig-name descname"><span class="pre">memorize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hopfield.Hopfield.Hopfield.memorize" title="Link to this definition"></a></dt>
+<dd><p>Memorizes the pattern using the Hopfield network.
+Generates a synaptic matrix J based on the input patterns.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Hopfield.Hopfield.Hopfield.recall">
+<span class="sig-name descname"><span class="pre">recall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hopfield.Hopfield.Hopfield.recall" title="Link to this definition"></a></dt>
+<dd><p>Recalls the pattern from memory using the Hopfield network.
+Simulates the network dynamics for a maximum of <cite>max_steps</cite> or until convergence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m0</strong> (<em>float</em>) – The initial overlap between the input and the memorized pattern.</p></li>
+<li><p><strong>delta_m</strong> (<em>float</em><em>, </em><em>optional</em>) – The convergence threshold for m0. Defaults to 0.001.</p></li>
+<li><p><strong>max_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of recall steps. Defaults to 100.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Hopfield.Hopfield.Hopfield.plot_m">
+<span class="sig-name descname"><span class="pre">plot_m</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hopfield.Hopfield.Hopfield.plot_m" title="Link to this definition"></a></dt>
+<dd><p>Plots the similarity m as a function of the recall steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_name</strong> (<em>str</em><em>, </em><em>optional</em>) – If provided, saves the plot to this file. Defaults to None.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em><em>, </em><em>optional</em>) – The resolution in dots per inch of the saved figure. Defaults to 300.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Hopfield.Hopfield.Hopfield.free">
+<span class="sig-name descname"><span class="pre">free</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hopfield.Hopfield.Hopfield.free" title="Link to this definition"></a></dt>
+<dd><p>Frees the GPU memory used by the class.
+Resets all class variables and releases the memory pools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>A tuple containing:</dt><dd><ul class="simple">
+<li><p>used_bytes</p></li>
+<li><p>total_bytes</p></li>
+<li><p>n_free_blocks from the memory pool of cupy.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Hopfield.Hopfield.HopfieldVis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hopfield.Hopfield.</span></span><span class="sig-name descname"><span class="pre">HopfieldVis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1234</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hopfield.Hopfield.HopfieldVis" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Hopfield.Hopfield.Hopfield" title="Hopfield.Hopfield.Hopfield"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hopfield</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Hopfield.Hopfield.HopfieldVis.recall">
+<span class="sig-name descname"><span class="pre">recall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hopfield.Hopfield.HopfieldVis.recall" title="Link to this definition"></a></dt>
+<dd><p>Recalls the pattern from memory using the Hopfield network.
+Simulates the network dynamics for a maximum of <cite>max_steps</cite> or until convergence.
+Stores each state of s in <cite>s_list</cite> and calculates m at each step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m0</strong> (<em>float</em>) – The initial overlap between the input and the memorized pattern.</p></li>
+<li><p><strong>delta_m</strong> (<em>float</em><em>, </em><em>optional</em>) – The convergence threshold for m0. Defaults to 0.001.</p></li>
+<li><p><strong>max_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of recall steps. Defaults to 100.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Hopfield.Hopfield.HopfieldVis.save_video">
+<span class="sig-name descname"><span class="pre">save_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1920,</span> <span class="pre">1080)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hopfield.Hopfield.HopfieldVis.save_video" title="Link to this definition"></a></dt>
+<dd><p>Saves the recall process as a video.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of the output video file. Defaults to None.</p></li>
+<li><p><strong>output_size</strong> (<em>tuple</em><em>, </em><em>optional</em>) – The size of the output video as (width, height). Defaults to (1920, 1080).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Hopfield.Hopfield.HopfieldVis.free">
+<span class="sig-name descname"><span class="pre">free</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hopfield.Hopfield.HopfieldVis.free" title="Link to this definition"></a></dt>
+<dd><p>Frees the GPU memory used by the class.
+Resets all class variables and releases the memory pools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>A tuple containing:</dt><dd><ul class="simple">
+<li><p>used_bytes</p></li>
+<li><p>total_bytes</p></li>
+<li><p>n_free_blocks from the memory pool of cupy.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="module-Hopfield">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-Hopfield" title="Link to this heading"></a></h2>
 </section>
 </section>
 

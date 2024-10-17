@@ -25,6 +25,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        if [ -f ./sphinx/requirements.txt ]; then pip install -r ./sphinx/requirements.txt; fi
         pip install sphinx sphinx_rtd_theme
 
     - name: Build documentation

@@ -5,6 +5,7 @@ import os
 import matplotlib.pyplot as plt
 import sys
 
+
 class Hopfield:
     def __init__(self, n, p, seed=1234):
         """
@@ -76,7 +77,10 @@ class Hopfield:
         Resets all class variables and releases the memory pools.
 
         Returns:
-            tuple: A tuple containing used_bytes, total_bytes, and n_free_blocks from the memory pool of cupy.
+            tuple: A tuple containing:
+                - used_bytes
+                - total_bytes
+                - n_free_blocks from the memory pool of cupy.
         """
         self.xi0 = None
         self.J = None
@@ -192,7 +196,10 @@ class HopfieldVis(Hopfield):
         Resets all class variables and releases the memory pools.
 
         Returns:
-            tuple: A tuple containing used_bytes, total_bytes, and n_free_blocks from the memory pool of cupy.
+            tuple: A tuple containing:
+                - used_bytes
+                - total_bytes
+                - n_free_blocks from the memory pool of cupy.
         """
         self.xi0 = None
         self.J = None

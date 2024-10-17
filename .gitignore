@@ -1,6 +1,9 @@
 *.mp4
 *.png
 !github.png
-/.ipynb_checkpoints/
-/__pycache__/
-
+.ipynb_checkpoints/
+__pycache__/
+/.venv/
+/docs/
+_static/
+_templates/

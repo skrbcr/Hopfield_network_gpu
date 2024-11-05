@@ -6,6 +6,16 @@
 
 GPU version of [Hopfield_network](https://github.com/skrbcr/Hopfield_network). I also revised source code and rewrite it in Python.
 
+
+## About
+
+Hopfield network is a classical neural network model.
+It is capable of storing patterns e.g., images and recalling them even when presented with noisy or incomplete input.
+
+**Demonstration**:
+
+https://github.com/user-attachments/assets/9209d37e-a18a-4ba0-ad60-7b2fbdb47c83
+
 ## Usage
 
 If you don't have graphics card, please execute it with [Google Colab](https://colab.research.google.com/).
